@@ -4,6 +4,7 @@ const cors = require('cors');
 const { OAuth2Client } = require('google-auth-library');
 const fs = require('fs');
 const path = require('path');
+const bcrypt = require('bcrypt');
 
 const app = express();
 app.use(cors());
@@ -70,28 +71,9 @@ try {
       'aurora4': { 
         id: 'aurora4', 
         name: 'Aurora', 
-        email: 'aurora@example.com',
-        role: 'admin'
-      },
-      'ben': { 
-        id: 'ben', 
-        name: 'Ben', 
-        email: 'ben@example.com',
-        role: 'user'
-      },
-      'ben-johns-3swgqqnt': {
-        id: 'ben-johns-3swgqqnt',
-        name: 'Ben Johns',
-        email: 'benwillski@gmail.com',
-        role: 'user',
-        password: 'test123'
-      },
-      'user-test-001': {
-        id: 'user-test-001',
-        name: 'Test User',
-        email: 'test@company.com',
-        role: 'user',
-        password: 'test123'
+        email: 'admin@aurorabackcountry.com',
+        role: 'admin',
+        isDemo: true
       }
     };
     saveUsers();
@@ -111,46 +93,7 @@ function saveUsers() {
   }
 }
 
-// Authentication endpoint (simplified - use real auth in production)
-app.post('/auth', async (req, res) => {
-  const { userId, password } = req.body;
-  
-  if (!userId) {
-    return res.status(400).json({ error: 'userId is required' });
-  }
-  
-  // In production, validate password against database
-  const user = users[userId];
-  if (!user) {
-    return res.status(401).json({ error: 'Invalid user' });
-  }
-  
-  try {
-    // First, create/update user in Stream with proper role
-    await serverClient.upsertUser({
-      id: userId,
-      name: user.name,
-      role: user.role, // Assign the user's role (admin or user)
-      image: `https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`
-    });
-    
-    // Then generate Stream token (after user exists)
-    const streamToken = serverClient.createToken(userId);
-    
-    res.json({
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email
-      },
-      streamToken,
-      streamApiKey: apiKey
-    });
-  } catch (error) {
-    console.error('Authentication error:', error);
-    res.status(500).json({ error: 'Authentication failed' });
-  }
-});
+// Authentication endpoint removed - using the email-supporting version below
 
 // User registration endpoint
 app.post('/register', async (req, res) => {
@@ -160,9 +103,20 @@ app.post('/register', async (req, res) => {
     return res.status(400).json({ error: 'Email, name, and password are required' });
   }
   
+  // Basic email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ error: 'Please enter a valid email address' });
+  }
+  
+  // Password strength validation
+  if (password.length < 6) {
+    return res.status(400).json({ error: 'Password must be at least 6 characters long' });
+  }
+  
   // Check if user already exists (by email)
-  const existingUserByEmail = Object.values(users).find(user => user.email === email);
-  if (existingUserByEmail) {
+  const existingUser = Object.values(users).find(user => user.email === email);
+  if (existingUser) {
     return res.status(409).json({ error: 'An account with this email already exists. Please use a different email or try logging in.' });
   }
   
@@ -195,12 +149,17 @@ app.post('/register', async (req, res) => {
     console.log(`🆔 Generated secure user ID: ${userId} for ${name}`);
     
     // Create user data
+    // Hash the password before storing
+    const saltRounds = 10;
+    const hashedPassword = bcrypt.hashSync(password, saltRounds);
+    
     const userData = {
       id: userId,
       name: name,
       email: email,
       role: 'user', // Default role for new registrations
-      password: password // In production, hash this password!
+      password: hashedPassword, // Securely hashed password
+      isDemo: false
     };
     
     // Add to our user database and save to file
@@ -216,6 +175,15 @@ app.post('/register', async (req, res) => {
       // Custom fields
       email: userData.email
     });
+    
+    // Add user to general channel automatically
+    try {
+      await serverClient.channel('team', 'general').addMembers([userId]);
+      console.log(`✅ Added ${userId} to general channel`);
+    } catch (channelError) {
+      console.log(`⚠️  Could not add ${userId} to general channel:`, channelError.message);
+      // Don't fail registration if channel add fails
+    }
     
     // Generate Stream token
     const streamToken = serverClient.createToken(userId);
@@ -276,6 +244,15 @@ app.post('/auth', async (req, res) => {
       image: `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.id}`,
       email: user.email
     });
+    
+    // Add user to general channel automatically
+    try {
+      await serverClient.channel('team', 'general').addMembers([user.id]);
+      console.log(`✅ Added ${user.id} to general channel`);
+    } catch (channelError) {
+      console.log(`⚠️  Could not add ${user.id} to general channel:`, channelError.message);
+      // Don't fail login if channel add fails
+    }
     
     // Generate Stream token
     const streamToken = serverClient.createToken(user.id);

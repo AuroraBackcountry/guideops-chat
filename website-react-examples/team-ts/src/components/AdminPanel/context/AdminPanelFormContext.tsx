@@ -76,10 +76,10 @@ export const AdminPanelForm = ({ children, defaultValues, workspace, onSubmit }:
   const action = getUpsertAction(workspace);
 
   const createChannel = useCallback(async ({ name, members }: UpsertChannelParams) => {
-    if (!createChannelType || members.length === 0) return;
+    if (!createChannelType || members.length < 1) return;
     
-    // Generate unique channel ID (separate from name)
-    const channelId = `${createChannelType}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    // Generate unique channel ID (just timestamp and random string)
+    const channelId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     
     const channelData: any = {
       name, // This is the editable display name
@@ -147,7 +147,7 @@ export const AdminPanelForm = ({ children, defaultValues, workspace, onSubmit }:
     if (action === 'create') {
       errors = {
         name: !values.name && createChannelType === 'team' ? 'Channel name is required' : null,
-        members: values.members.length < 2  ? 'At least one additional member is required' : null,
+        members: values.members.length < 1  ? 'At least one member is required' : null,
       };
     }
 

@@ -12,7 +12,7 @@ interface LoginProps {
 }
 
 export const Login: React.FC<LoginProps> = ({ onLogin, onGoogleLogin, onSwitchToRegister, loading, error }) => {
-  const [userId, setUserId] = useState('aurora4');
+  const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {

@@ -25,6 +25,7 @@ import Avatar24 from '../assets/userImages/photo-1552058544-f2b08422138a.jpeg';
 
 export { PinIcon } from './PinIcon';
 export { SearchIcon } from './SearchIcon';
+export { PlusIcon } from './PlusIcon';
 
 const randomImages = [
   Avatar1,

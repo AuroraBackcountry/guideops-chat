@@ -47,7 +47,7 @@ export const useMessageInputCompositionControls = () => {
     const textarea = textareaRef.current;
     if (!textarea) return;
 
-    let newSelection;
+    let newSelection: { start: number; end: number };
     const {activeFormatting} = customDataManager.customComposerData;
     if (!activeFormatting) {
       textComposer.wrapSelection({head: wrappingMarkdown, tail: wrappingMarkdown});

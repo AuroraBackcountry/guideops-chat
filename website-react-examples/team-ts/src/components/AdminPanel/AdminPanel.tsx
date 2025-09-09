@@ -15,7 +15,7 @@ export const AdminPanel = () => {
   const onSubmit = useCallback(() => displayWorkspace('Chat'), [displayWorkspace]);
 
   let defaultFormValues: FormValues = {name: '', members: []};
-  let Form = null;
+  let Form: React.ComponentType | null = null;
 
   if (activeWorkspace.match('Channel-Create')) {
     defaultFormValues = { members: client.userID ? [client.userID] : [], name: '', };

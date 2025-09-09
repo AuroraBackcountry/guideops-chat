@@ -167,7 +167,7 @@ export const TeamMessage = () => {
                 <strong>{message.user?.name || message.user?.id}</strong>
                 {message.type === 'error' && (
                   <div className='str-chat__message-team-error-header'>
-                    {t('Only visible to you')}
+                    Only visible to you
                   </div>
                 )}
               </div>
@@ -203,7 +203,7 @@ export const TeamMessage = () => {
                       </DialogAnchor>
                       <button
                         aria-expanded={reactionSelectorDialogIsOpen}
-                        aria-label={t('aria/Open Reaction Selector')}
+                        aria-label="Open Reaction Selector"
                         className='str-chat__message-reactions-button'
                         data-testid='message-reaction-action'
                         onClick={() => reactionSelectorDialog?.toggle()}
@@ -250,8 +250,8 @@ export const TeamMessage = () => {
               >
                 <ErrorIcon/>
                 {message.error?.status !== 403
-                  ? t('Message Failed · Click to try again')
-                  : t('Message Failed · Unauthorized')}
+                  ? 'Message Failed · Click to try again'
+                  : 'Message Failed · Unauthorized'}
               </button>
             )}
           </div>

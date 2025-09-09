@@ -33,11 +33,44 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || 'your_google_client_id_here';
 
 const ProductionApp = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(() => {
+    // Try to restore user from sessionStorage on app load
+    const savedUser = sessionStorage.getItem('guideops_user');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
   const [client, setClient] = useState<StreamChat | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
   const [showRegister, setShowRegister] = useState(false);
+
+  // Restore Stream connection on app load if user is saved
+  useEffect(() => {
+    const restoreConnection = async () => {
+      if (user && !client) {
+        const savedToken = sessionStorage.getItem('guideops_token');
+        const savedApiKey = sessionStorage.getItem('guideops_api_key');
+        
+        if (savedToken && savedApiKey) {
+          try {
+            await connectToStream({
+              user,
+              streamToken: savedToken,
+              streamApiKey: savedApiKey
+            });
+          } catch (error) {
+            console.error('Failed to restore connection:', error);
+            // Clear invalid session data
+            sessionStorage.removeItem('guideops_user');
+            sessionStorage.removeItem('guideops_token');
+            sessionStorage.removeItem('guideops_api_key');
+            setUser(null);
+          }
+        }
+      }
+    };
+    
+    restoreConnection();
+  }, [user, client]);
 
   const handleGoogleLogin = async (googleCredential: string) => {
     setLoading(true);
@@ -110,6 +143,11 @@ const ProductionApp = () => {
       });
       });
 
+      // Save session data for persistence across refreshes
+      sessionStorage.setItem('guideops_user', JSON.stringify(data.user));
+      sessionStorage.setItem('guideops_token', data.streamToken);
+      sessionStorage.setItem('guideops_api_key', data.streamApiKey);
+      
       setUser(data.user);
       setClient(streamClient);
     } catch (streamError) {
@@ -178,6 +216,11 @@ const ProductionApp = () => {
       await client.disconnectUser();
       setClient(null);
     }
+    // Clear session data
+    sessionStorage.removeItem('guideops_user');
+    sessionStorage.removeItem('guideops_token');
+    sessionStorage.removeItem('guideops_api_key');
+    
     setUser(null);
     setError('');
   };

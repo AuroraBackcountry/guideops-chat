@@ -2,6 +2,10 @@ import { MouseEventHandler, useCallback, useState } from 'react';
 import { Avatar, useChannelActionContext, useChannelStateContext, useChatContext } from 'stream-chat-react';
 
 import { PinIcon } from '../../assets';
+import { AddMemberButton } from '../AddMemberButton';
+import { AddMemberModal } from '../AddMemberModal';
+import { AllUsersModal } from '../AllUsersModal';
+import { ArchivedChannelsList } from '../ArchivedChannelsList';
 
 import { ChannelInfoIcon } from './ChannelInfoIcon';
 import { AdminInfoPanel } from '../AdminInfoPanel/AdminInfoPanel';
@@ -13,6 +17,9 @@ import { useWorkspaceController } from '../../context/WorkspaceController';
 export const TeamChannelHeader = () => {
   const [showAdminPanel, setShowAdminPanel] = useState(false);
   const [showChannelInfo, setShowChannelInfo] = useState(false);
+  const [showAddMemberModal, setShowAddMemberModal] = useState(false);
+  const [showAllUsersModal, setShowAllUsersModal] = useState(false);
+  const [showArchivedChannels, setShowArchivedChannels] = useState(false);
   
   const { displayWorkspace } = useWorkspaceController();
   const { client } = useChatContext();
@@ -26,9 +33,6 @@ export const TeamChannelHeader = () => {
   const channelIcon = isPrivate ? '🔒' : '#';
   const teamHeader = `${channelIcon} ${channel?.data?.name || channel?.data?.id || 'random'}`;
 
-  const openChannelEditPanel = useCallback(() => {
-    displayWorkspace('Admin-Channel-Edit');
-  }, [displayWorkspace]);
 
   const openChannelInfo = useCallback(() => {
     setShowChannelInfo(true);
@@ -98,9 +102,15 @@ export const TeamChannelHeader = () => {
       ) : (
         <div className='workspace-header__block'>
           <div className='team-channel-header__name workspace-header__title'>{teamHeader}</div>
-          <button onClick={openChannelInfo} title='Channel Information'>
+          <button onClick={openChannelInfo} title='Channel Information' className='channel-info-btn'>
             <ChannelInfoIcon />
           </button>
+          <AddMemberButton 
+            variant="text" 
+            size="small" 
+            onClick={() => setShowAddMemberModal(true)}
+            className="team-channel-header__add-member"
+          />
         </div>
       )}
       <div className='workspace-header__block'>
@@ -112,14 +122,33 @@ export const TeamChannelHeader = () => {
           <PinIcon />
           Pins
         </button>
+        <button
+          className='workspace-header__subtitle users-button'
+          onClick={() => setShowAllUsersModal(true)}
+          title='View All Users'
+        >
+          👥 Users
+        </button>
         {isAdmin && (
-          <button
-            className='workspace-header__subtitle admin-button'
-            onClick={openAdminPanel}
-            title='Admin Panel - Settings, Policies, User Management'
-          >
-            ⚙️ Settings
-          </button>
+          <>
+            <button
+              className='workspace-header__subtitle archived-button'
+              onClick={() => {
+                console.log('🎯 CLICKED ARCHIVED BUTTON - Testing if new code is running');
+                setShowArchivedChannels(true);
+              }}
+              title='View Archived Channels'
+            >
+              📦 Archived
+            </button>
+            <button
+              className='workspace-header__subtitle admin-button'
+              onClick={openAdminPanel}
+              title='Admin Panel - Settings, Policies, User Management'
+            >
+              ⚙️ Settings
+            </button>
+          </>
         )}
       </div>
 
@@ -129,6 +158,28 @@ export const TeamChannelHeader = () => {
       
       {showChannelInfo && (
         <ChannelInfoModal onClose={() => setShowChannelInfo(false)} />
+      )}
+      
+      {showAddMemberModal && (
+        <AddMemberModal 
+          isOpen={showAddMemberModal}
+          onClose={() => setShowAddMemberModal(false)} 
+        />
+      )}
+      
+      {showAllUsersModal && (
+        <AllUsersModal 
+          isOpen={showAllUsersModal}
+          onClose={() => setShowAllUsersModal(false)} 
+        />
+      )}
+      
+      {showArchivedChannels && isAdmin && (
+        <div className="archived-channels-overlay" onClick={() => setShowArchivedChannels(false)}>
+          <div onClick={(e) => e.stopPropagation()}>
+            <ArchivedChannelsList onClose={() => setShowArchivedChannels(false)} />
+          </div>
+        </div>
       )}
     </div>
   );

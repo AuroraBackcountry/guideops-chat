@@ -2,27 +2,16 @@
   "aurora4": {
     "id": "aurora4",
     "name": "Aurora",
-    "email": "aurora@example.com",
-    "role": "admin"
+    "email": "admin@aurorabackcountry.com",
+    "role": "admin",
+    "isDemo": true
   },
-  "ben": {
-    "id": "ben",
-    "name": "Ben",
-    "email": "ben@example.com",
-    "role": "user"
-  },
-  "user-test-001": {
-    "id": "user-test-001",
-    "name": "Test User",
-    "email": "test@company.com",
-    "role": "user",
-    "password": "test123"
-  },
-  "ben-johns-qrfurnq7": {
-    "id": "ben-johns-qrfurnq7",
-    "name": "ben johns",
+  "ben_a347d129407d": {
+    "id": "ben_a347d129407d",
+    "name": "Ben Johns",
     "email": "benwillski@gmail.com",
     "role": "user",
-    "password": "benwillski123"
+    "password": "$2b$10$6dILcYclX3NyAVFuDVYQJ.8dAgbhC3oshnEWTRfSO1vYyeT5D8xKm",
+    "isDemo": false
   }
 }

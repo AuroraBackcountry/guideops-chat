@@ -11,6 +11,7 @@ declare module 'stream-chat' {
     private?: boolean;
     invite_only?: boolean;
     created_by_admin?: boolean;
+    // Removed custom archive properties - using Stream native disabled/hidden instead
   }
 
   interface CustomMessageComposerData {

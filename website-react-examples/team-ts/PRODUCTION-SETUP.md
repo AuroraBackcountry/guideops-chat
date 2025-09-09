@@ -20,7 +20,7 @@ Edit `.env.server` and add your actual Stream API secret:
 ```bash
 # Backend Environment Variables
 STREAM_API_KEY=rge6xccmyrdj
-STREAM_API_SECRET=your_actual_stream_api_secret_here  # ← Replace this!
+STREAM_API_SECRET=cknvd7994up7senfy7u2ekuxf3b7hsb72zwdx389w5ersf73z59zqs8rk4gp3h5g
 NODE_ENV=production
 PORT=3001
 ```

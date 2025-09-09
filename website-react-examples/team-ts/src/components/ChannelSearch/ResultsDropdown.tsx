@@ -16,17 +16,24 @@ const SearchResult = (props: SearchResultProps) => {
 
   if (isChannel(result)) {
     const channel = result as Channel;
+    const isArchived = channel.data?.disabled === true;
 
     return (
       <div
         onClick={() => setChannel(channel)}
         className={clsx(
           'channel-search__result-container',
-          {highlighted: focusedId === channel.id}
+          {
+            highlighted: focusedId === channel.id,
+            archived: isArchived
+          }
         )}
       >
-        <div className='result-hashtag'>#</div>
-        <p className='channel-search__result-text'>{channel?.data?.name}</p>
+        <div className='result-hashtag'>{isArchived ? '📦' : '#'}</div>
+        <p className='channel-search__result-text'>
+          {channel?.data?.name}
+          {isArchived && <span className='archived-indicator'>(Archived)</span>}
+        </p>
       </div>
     );
   } else {
