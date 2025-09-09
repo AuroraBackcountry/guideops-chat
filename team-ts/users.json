@@ -13,5 +13,14 @@
     "role": "user",
     "password": "$2b$10$6dILcYclX3NyAVFuDVYQJ.8dAgbhC3oshnEWTRfSO1vYyeT5D8xKm",
     "isDemo": false
+  },
+  "aurora-ai-assistant": {
+    "id": "aurora-ai-assistant",
+    "name": "🤖 Aurora AI Assistant",
+    "email": "ai-assistant@aurorabackcountry.com",
+    "role": "bot",
+    "password": "$2b$10$VBxmJAyIZKYHF8qUz8QjcuFbMJGl6j9aWqRlJ4R8uOXs9Hy/R8QjK",
+    "isDemo": false,
+    "isBot": true
   }
 }

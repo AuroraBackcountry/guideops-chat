@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import {useMemo} from 'react';
+import {useMemo, useState} from 'react';
 import {
   AttachmentPreviewList,
   SendButton,
@@ -19,6 +19,9 @@ import {EmojiPicker} from './EmojiPicker';
 import {useMessageInputCompositionControls} from './hooks/useMessageInputCompositionControls';
 import type {CustomDataManagerState, MessageComposerConfig} from "stream-chat";
 import {SendButtonIcon} from "./SendButtonIcon";
+import {useGeolocation} from '../../hooks/useGeolocation';
+import {useChannelStateContext} from 'stream-chat-react';
+import {LocationPermissionModal} from '../LocationPermissionModal';
 
 const attachmentManagerConfigStateSelector = (state: MessageComposerConfig) => ({
   acceptedFiles: state.attachments.acceptedFiles,
@@ -46,7 +49,45 @@ export const TeamMessageInput = () => {
   const { activeFormatting, isComposingGiphyText } = useStateStore(messageComposer.customDataManager.state, customComposerDataSelector)
   const {isUploadEnabled } =  useAttachmentManagerState();
   const hasSendableData = useMessageComposerHasSendableData();
+  const { getCurrentLocation, isLoading: isLocationLoading, error: locationError } = useGeolocation();
+  const { channel } = useChannelStateContext();
+  const [showLocationModal, setShowLocationModal] = useState(false);
 
+  const handleLocationButtonClick = () => {
+    setShowLocationModal(true);
+  };
+
+  const handleLocationShare = async () => {
+    setShowLocationModal(false);
+    try {
+      const location = await getCurrentLocation();
+      
+      // Create a location attachment
+      const locationAttachment = {
+        type: 'location',
+        latitude: location.latitude,
+        longitude: location.longitude,
+        accuracy: location.accuracy,
+        timestamp: location.timestamp,
+        title: 'Location',
+        title_link: `https://maps.google.com/?q=${location.latitude},${location.longitude}`,
+        text: `${location.latitude.toFixed(6)}, ${location.longitude.toFixed(6)}`,
+        fallback: `Location: ${location.latitude.toFixed(6)}, ${location.longitude.toFixed(6)}`
+      };
+
+      // Send message with location attachment directly
+      await channel.sendMessage({
+        text: '📍 Shared location',
+        attachments: [locationAttachment]
+      });
+    } catch (error) {
+      console.error('Failed to get location:', error);
+    }
+  };
+
+  const handleLocationCancel = () => {
+    setShowLocationModal(false);
+  };
 
   const accept = useMemo(
     () =>
@@ -125,9 +166,21 @@ export const TeamMessageInput = () => {
             active={activeFormatting === 'code'}
             onClick={formatter.code}
           />
+          <MessageInputControlButton
+            type='location'
+            active={isLocationLoading}
+            onClick={handleLocationButtonClick}
+          />
         </div>
       </div>
       {TypingIndicator && <TypingIndicator />}
+      <LocationPermissionModal
+        isOpen={showLocationModal}
+        onClose={handleLocationCancel}
+        onAllow={handleLocationShare}
+        onDeny={handleLocationCancel}
+        error={locationError?.message}
+      />
     </div>
   );
 };

@@ -2,7 +2,7 @@ import 'stream-chat';
 
 
 export type MessageInputFormattingType =  'bold' | 'italics' | 'code' | 'strikethrough';
-export type MessageInputControlType = 'emoji' | 'attachment' | MessageInputFormattingType;
+export type MessageInputControlType = 'emoji' | 'attachment' | 'location' | MessageInputFormattingType;
 
 declare module 'stream-chat' {
   interface CustomChannelData {
@@ -17,5 +17,18 @@ declare module 'stream-chat' {
   interface CustomMessageComposerData {
     command: 'giphy' | null;
     activeFormatting: MessageInputFormattingType | null;
+  }
+
+  interface AttachmentData {
+    // Location attachment data
+    latitude?: number;
+    longitude?: number;
+    address?: string;
+    accuracy?: number;
+    timestamp?: number;
+  }
+
+  interface Attachment extends AttachmentData {
+    // This extends the base Attachment type with our location fields
   }
 }

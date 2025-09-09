@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import React, {ElementRef, useMemo, useRef, useState} from 'react';
 import type {TranslationLanguages} from 'stream-chat';
 import {
-  Attachment,
   Avatar,
   DialogAnchor,
   EditMessageForm,
@@ -30,6 +29,7 @@ import {PinIndicator} from './PinIndicator';
 import {UserInfoModal} from '../UserInfoModal/UserInfoModal';
 
 import {useWorkspaceController} from '../../context/WorkspaceController';
+import {CustomAttachment} from '../CustomAttachment';
 
 import {ErrorIcon} from "./icons";
 
@@ -236,8 +236,8 @@ export const TeamMessage = () => {
                 {messageText}
               </div>
             )}
-            {!message.text && message.attachments?.length && Attachment ? (
-              <Attachment actionHandler={handleAction} attachments={message.attachments}/>
+            {!message.text && message.attachments?.length ? (
+              <CustomAttachment actionHandler={handleAction} attachments={message.attachments}/>
             ) : null}
             {message.latest_reactions?.length !== 0 && message.text !== '' && canReact && (
               <ReactionsList/>
@@ -256,8 +256,8 @@ export const TeamMessage = () => {
             )}
           </div>
           <MessageStatus messageType='team'/>
-          {message.text && message.attachments?.length && Attachment ? (
-            <Attachment actionHandler={handleAction} attachments={message.attachments}/>
+          {message.text && message.attachments?.length ? (
+            <CustomAttachment actionHandler={handleAction} attachments={message.attachments}/>
           ) : null}
           {message.latest_reactions &&
             message.latest_reactions.length !== 0 &&

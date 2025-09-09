@@ -52,9 +52,40 @@ let serverClient;
 try {
   serverClient = StreamChat.getInstance(apiKey, apiSecret);
   console.log('✅ Stream Chat client initialized');
+  
+  // Initialize bot user
+  initializeBotUser().catch(err => console.error('Bot initialization error:', err));
 } catch (error) {
   console.error('❌ Failed to initialize Stream Chat client:', error.message);
   process.exit(1);
+}
+
+// Initialize bot user in Stream Chat
+async function initializeBotUser() {
+  try {
+    console.log('🤖 Initializing bot user...');
+    const botUser = {
+      id: 'aurora-ai-assistant',
+      name: '🤖 Aurora AI Assistant',
+      role: 'user', // Use 'user' role instead of 'bot' for compatibility
+      image: 'https://api.dicebear.com/7.x/bottts/svg?seed=aurora-ai'
+    };
+
+    await serverClient.upsertUser(botUser);
+    console.log('✅ Bot user initialized:', botUser.name);
+    
+    // Also create a demo messaging channel for testing
+    try {
+      const generalChannel = serverClient.channel('team', 'general');
+      await generalChannel.addMembers([botUser.id]);
+      console.log('✅ Bot added to general channel');
+    } catch (channelError) {
+      console.log('⚠️ Could not add bot to general channel:', channelError.message);
+    }
+  } catch (error) {
+    console.error('❌ Failed to initialize bot user:', error);
+    console.error('Error details:', error.message);
+  }
 }
 
 // Google OAuth setup with error handling
@@ -285,6 +316,27 @@ app.post('/auth', async (req, res) => {
   } catch (error) {
     console.error('Authentication error:', error);
     res.status(500).json({ error: 'Authentication failed' });
+  }
+});
+
+// Manual bot initialization endpoint for testing
+app.post('/init-bot', async (req, res) => {
+  try {
+    console.log('🤖 Manual bot initialization requested...');
+    const botUser = {
+      id: 'aurora-ai-assistant',
+      name: '🤖 Aurora AI Assistant',
+      role: 'user',
+      image: 'https://api.dicebear.com/7.x/bottts/svg?seed=aurora-ai'
+    };
+
+    await serverClient.upsertUser(botUser);
+    console.log('✅ Bot user created manually:', botUser.name);
+    
+    res.json({ success: true, message: 'Bot user initialized', bot: botUser });
+  } catch (error) {
+    console.error('❌ Manual bot initialization failed:', error);
+    res.status(500).json({ error: 'Bot initialization failed', details: error.message });
   }
 });
 

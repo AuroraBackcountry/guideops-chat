@@ -100,6 +100,33 @@ const AttachmentIcon = () => (
   </svg>
 );
 
+const LocationIcon = () => (
+  <svg
+    width='16'
+    height='16'
+    viewBox='0 0 16 16'
+    fill='none'
+    xmlns='http://www.w3.org/2000/svg'
+  >
+    <path
+      d='M8 1C5.24 1 3 3.24 3 6C3 10.25 8 15 8 15S13 10.25 13 6C13 3.24 10.76 1 8 1Z'
+      stroke='currentColor'
+      strokeWidth='1.5'
+      strokeLinecap='round'
+      strokeLinejoin='round'
+    />
+    <circle
+      cx='8'
+      cy='6'
+      r='2'
+      stroke='currentColor'
+      strokeWidth='1.5'
+      strokeLinecap='round'
+      strokeLinejoin='round'
+    />
+  </svg>
+);
+
 const ControlsIcons: Record<MessageInputControlType, React.ComponentType> = {
   bold: BoldIcon,
   code: CodeSnippetIcon,
@@ -107,6 +134,7 @@ const ControlsIcons: Record<MessageInputControlType, React.ComponentType> = {
   italics: ItalicsIcon,
   'strikethrough': StrikeThroughIcon,
   attachment: AttachmentIcon,
+  location: LocationIcon,
 };
 
 
