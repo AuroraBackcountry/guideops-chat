@@ -7,22 +7,15 @@
   "license": "MIT",
   "scripts": {
     "build:cs": "cd customer-support && yarn && yarn build && mkdir -p ../docs/customer-support && mv build/* ../docs/customer-support",
-    "build:sm": "cd social-messenger-ts && yarn && yarn build && mkdir -p ../docs/social-messenger && mv build/* ../docs/social-messenger",
-    "build:ve": "cd virtual-event && yarn && yarn build && mkdir -p ../docs/virtual-event && mv build/* ../docs/virtual-event",
-    "build:ve2": "cd virtual-event && yarn && yarn build && mkdir -p ../docs/virtual-event-v2 && mv build/* ../docs/virtual-event-v2",
     "build:t": "cd team-ts && yarn && yarn build && mkdir -p ../docs/team && mv build/* ../docs/team",
-    "build:js": "rm -rf ./docs && yarn build:cs && yarn build:sm && yarn build:ve && yarn build:t && yarn build:ve2",
-    "build:js:public": "rm -rf ./docs && yarn build:sm && yarn build:t && yarn build:ve2",
+    "build:js": "rm -rf ./docs && yarn build:cs && yarn build:t",
+    "build:js:public": "rm -rf ./docs && yarn build:cs && yarn build:t",
     "lint": "eslint",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start:customer-support": "cd customer-support && yarn start",
-    "start:social-messenger-ts": "cd social-messenger-ts && yarn start",
     "start:team-ts": "cd team-ts && yarn start",
-    "start:virtual-event": "cd virtual-event && yarn start",
     "upgrade:customer-support": "cd customer-support && yarn add stream-chat-react stream-chat",
-    "upgrade:social-messenger-ts": "cd social-messenger-ts && yarn add stream-chat-react stream-chat",
-    "upgrade:team-ts": "cd team-ts && yarn add stream-chat-react stream-chat",
-    "upgrade:virtual-event": "cd virtual-event && yarn add stream-chat-react stream-chat"
+    "upgrade:team-ts": "cd team-ts && yarn add stream-chat-react stream-chat"
   },
   "devDependencies": {
     "eslint": "^7.6.0",

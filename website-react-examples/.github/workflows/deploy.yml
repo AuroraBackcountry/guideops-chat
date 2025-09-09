@@ -1,14 +1,10 @@
-name: Deploy Demo Apps
+name: Deploy GuideOps Chat Apps
 on:
   push:
     branches:
-      - master
+      - main
     paths:
-      - gaming-livestream/**
-      - social-messenger-ts/**
       - team-ts/**
-      - virtual-event/**
-      - virtual-event-old/**
       - customer-support/**
       - .github/workflows/deploy.yml
 
@@ -25,7 +21,9 @@ jobs:
       - name: Build Apps
         env:
           REACT_APP_STREAM_KEY: ${{ vars.EXAMPLES_STREAM_API_KEY }}
-        run: yarn build:js:public
+        run: |
+          yarn build:cs
+          yarn build:t
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
