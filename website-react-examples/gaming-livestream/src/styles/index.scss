@@ -1,0 +1,20 @@
+@layer default-chat-sdk {
+  @import '~stream-chat-react/dist/scss/v2/index.scss';
+}
+
+@import "general";
+@import "layout";
+@import "variables";
+
+@import "Attachment";
+@import "ChatUpgrades";
+@import "GamingChat";
+@import "GamingChatHeader";
+@import "GamingChatNotification";
+@import "GamingFooter";
+@import "GamingHeader";
+@import "GamingMessage";
+@import "GamingMessageInput";
+@import "GamingParticipants";
+@import "GamingThread";
+@import "GamingVideo";
