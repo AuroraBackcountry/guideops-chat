@@ -1,27 +1,23 @@
-# Aurora Chat
+# GuideOps Team Chat
 
-A comprehensive real-time chat application built with React and TypeScript, featuring Stream Chat integration and multiple example implementations.
+A comprehensive real-time team chat application built with React and TypeScript, featuring Stream Chat integration, admin controls, and production-ready authentication.
 
 ## Project Structure
 
-This repository contains:
+This repository contains the **GuideOps Team Chat** application - a professional team communication platform with:
 
-- **Main Aurora Chat Application**: A React/TypeScript chat application with Stream Chat integration
-- **website-react-examples/**: Multiple chat application examples including:
-  - Social Messenger (JavaScript & TypeScript versions)
-  - Team Chat (JavaScript & TypeScript versions)
-  - Virtual Event platform
-  - Gaming Livestream chat
-  - Customer Support chat
+- **Team Chat Application** (`website-react-examples/team-ts/`): Main TypeScript/React chat application
+- **Production Features**: Server-side authentication, user management, admin controls
+- **Advanced Features**: Message threading, file attachments, emoji reactions, Giphy integration
 
 ## Getting Started
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and uses TypeScript.
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- npm or yarn
+- Node.js (v16 or higher)
+- Yarn (recommended) or npm
 - Stream Chat account and API keys
 
 ### Installation
@@ -29,74 +25,71 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 1. Clone the repository:
 ```bash
 git clone https://github.com/AuroraBackcountry/guideops-chat.git
-cd guideops-chat
+cd guideops-chat/website-react-examples/team-ts
 ```
 
 2. Install dependencies:
 ```bash
-npm install
+yarn install
 ```
 
 3. Set up environment variables:
-   - Copy `.env.example` to `.env.local`
+   - Copy `.env.example` to `.env.development`
    - Add your Stream Chat API keys and configuration
 
 4. Start the development server:
 ```bash
-npm start
+yarn start
 ```
 
 The app will open at [http://localhost:3000](http://localhost:3000).
 
 ## Available Scripts
 
-### `npm start`
+Navigate to the `website-react-examples/team-ts/` directory to run these commands:
 
-Runs the app in the development mode.\
+### `yarn start`
+
+Runs the app in development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### `yarn dev`
 
-### `npm test`
+Runs both the frontend and backend server concurrently for full-stack development.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### `yarn server`
 
-### `npm run build`
+Starts the Node.js backend server for production authentication.
+
+### `yarn build`
 
 Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The build is optimized for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### `yarn test`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Launches the test runner in interactive watch mode.
 
 ## Features
 
-- Real-time messaging with Stream Chat
-- User authentication and profile management
-- Admin controls and user management
-- Multiple chat application examples
-- TypeScript support
-- Responsive design
-- Modern React patterns and hooks
+- **Real-time Team Chat**: Instant messaging with Stream Chat integration
+- **Production Authentication**: Server-side token generation and user management
+- **Admin Controls**: Channel management, user permissions, and moderation tools
+- **Advanced Messaging**: Message threading, reactions, file attachments
+- **Giphy Integration**: Built-in GIF search and sharing
+- **TypeScript Support**: Full type safety and excellent developer experience
+- **Responsive Design**: Works seamlessly on desktop and mobile
+- **SCSS Architecture**: Organized, maintainable styling system
+
+## Production Deployment
+
+For production deployment instructions, see:
+- `website-react-examples/team-ts/PRODUCTION-SETUP.md` - Complete production setup guide
+- `website-react-examples/team-ts/GOOGLE-OAUTH-SETUP.md` - OAuth integration setup
 
 ## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-For Stream Chat integration, visit the [Stream Chat documentation](https://getstream.io/chat/docs/).
+- [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started)
+- [React documentation](https://reactjs.org/)
+- [Stream Chat documentation](https://getstream.io/chat/docs/)
+- [TypeScript documentation](https://www.typescriptlang.org/docs/)

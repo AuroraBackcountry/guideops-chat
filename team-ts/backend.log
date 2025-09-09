@@ -1,0 +1,9 @@
+✅ Environment variables loaded successfully
+📡 Stream API Key: rge6xccmyrdj
+🔐 Google OAuth: Not configured
+✅ Stream Chat client initialized
+⚠️ Google OAuth not configured (GOOGLE_CLIENT_ID missing)
+📊 Loaded 2 users from database
+🚀 GuideOps Backend running on http://0.0.0.0:3001
+🌐 Network access: http://10.0.0.234:3001
+🔐 Environment: development
