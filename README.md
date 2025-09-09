@@ -7,7 +7,6 @@ A comprehensive real-time chat application built with React and TypeScript, feat
 This repository contains:
 
 - **Main Aurora Chat Application**: A React/TypeScript chat application with Stream Chat integration
-- **guideops-chat/**: Complete Stream Chat implementation with admin controls and user management
 - **website-react-examples/**: Multiple chat application examples including:
   - Social Messenger (JavaScript & TypeScript versions)
   - Team Chat (JavaScript & TypeScript versions)

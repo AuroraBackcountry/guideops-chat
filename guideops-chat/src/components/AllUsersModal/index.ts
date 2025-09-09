@@ -1,2 +1,0 @@
-export { AllUsersModal } from './AllUsersModal';
-

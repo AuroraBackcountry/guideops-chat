@@ -1,2 +1,0 @@
-export { AddMemberModal } from './AddMemberModal';
-
