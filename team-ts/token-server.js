@@ -340,6 +340,43 @@ app.post('/init-bot', async (req, res) => {
   }
 });
 
+// Create DM channel with Aurora AI Assistant
+app.post('/chat-with-bot', async (req, res) => {
+  try {
+    const { userId } = req.body;
+    
+    if (!userId) {
+      return res.status(400).json({ error: 'userId is required' });
+    }
+
+    console.log(`🤖 Creating DM channel between ${userId} and Aurora AI Assistant...`);
+    
+    // Create or get existing messaging channel between user and bot
+    const channel = serverClient.channel('messaging', {
+      members: [userId, 'aurora-ai-assistant'],
+      created_by_id: userId
+    });
+
+    await channel.create();
+    console.log('✅ DM channel with bot created/retrieved');
+
+    // Send a welcome message from the bot
+    await channel.sendMessage({
+      text: '👋 Hello! I\'m Aurora, your AI assistant. How can I help you today?',
+      user_id: 'aurora-ai-assistant'
+    });
+
+    res.json({ 
+      success: true, 
+      message: 'DM channel with Aurora AI created',
+      channelId: channel.id 
+    });
+  } catch (error) {
+    console.error('❌ Failed to create bot DM channel:', error);
+    res.status(500).json({ error: 'Failed to create bot DM channel', details: error.message });
+  }
+});
+
 // Google OAuth authentication endpoint
 app.post('/auth/google', async (req, res) => {
   const { credential } = req.body;

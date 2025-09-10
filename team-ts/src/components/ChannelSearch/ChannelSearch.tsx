@@ -261,9 +261,23 @@ export const ChannelSearch = () => {
       console.log('✅ Search results - Users found:', users.length);
       
       const otherUsers = users.filter((user) => user.id !== client.userID);
+      
+      // Always include Aurora AI Assistant in search results if query matches
+      const botUser = users.find(user => user.id === 'aurora-ai-assistant');
+      const shouldIncludeBot = botUser && (
+        text.toLowerCase().includes('aurora') ||
+        text.toLowerCase().includes('ai') ||
+        text.toLowerCase().includes('assistant') ||
+        text.toLowerCase().includes('bot')
+      );
+
+      const finalUsers = shouldIncludeBot && !otherUsers.find(u => u.id === 'aurora-ai-assistant') 
+        ? [botUser, ...otherUsers] 
+        : otherUsers;
+
       if (channels.length) setTeamChannels(channels);
-      if (otherUsers.length) setDirectChannels(otherUsers);
-      setAllChannels([...channels, ...otherUsers]);
+      if (finalUsers.length) setDirectChannels(finalUsers);
+      setAllChannels([...channels, ...finalUsers]);
     } catch (error) {
       console.error('❌ Channel search error:', error);
       console.error('Error details:', error);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { ChannelList, useChatContext } from 'stream-chat-react';
 
 import {
@@ -171,6 +171,74 @@ const AdminControls = () => {
   );
 };
 
+const ChatWithAIButton = () => {
+  const { client, setActiveChannel } = useChatContext();
+  
+  const startChatWithBot = useCallback(async () => {
+    try {
+      console.log('🤖 Starting chat with Aurora AI Assistant...');
+      
+      // First try to find existing channel with the bot
+      const channels = await client.queryChannels({
+        type: 'messaging',
+        members: { $eq: [client.userID!, 'aurora-ai-assistant'] }
+      });
+
+      if (channels.length > 0) {
+        // Channel exists, just set it as active
+        console.log('✅ Found existing channel with bot');
+        setActiveChannel(channels[0]);
+        return;
+      }
+
+      // No existing channel, create one via our backend endpoint
+      const response = await fetch('http://localhost:3001/chat-with-bot', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: client.userID }),
+      });
+
+      if (response.ok) {
+        console.log('✅ Created new chat with Aurora AI');
+        // Refresh channels to show the new DM
+        const newChannels = await client.queryChannels({
+          type: 'messaging',
+          members: { $eq: [client.userID!, 'aurora-ai-assistant'] }
+        });
+        
+        if (newChannels.length > 0) {
+          setActiveChannel(newChannels[0]);
+        }
+      } else {
+        console.error('❌ Failed to create chat with bot');
+      }
+    } catch (error) {
+      console.error('❌ Error starting chat with bot:', error);
+    }
+  }, [client, setActiveChannel]);
+
+  return (
+    <div className='chat-with-ai-button'>
+      <button 
+        className='admin-controls__button'
+        onClick={startChatWithBot}
+        title='Start a conversation with Aurora AI Assistant'
+        style={{
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          border: 'none',
+          color: 'white',
+          width: '100%',
+          marginBottom: '8px'
+        }}
+      >
+        🤖 Chat with Aurora AI
+      </button>
+    </div>
+  );
+};
+
 interface SidebarProps {
   onLogout?: () => void;
 }
@@ -184,6 +252,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onLogout }) => {
           <p className='channel-list-bar__header__text'>GuideOps</p>
         </div>
         <ChannelSearch />
+        <ChatWithAIButton />
         <TeamChannelsList/>
         <MessagingChannelsList/>
         {onLogout && <UserProfileMenu onLogout={onLogout} />}
